@@ -10,6 +10,8 @@ import { dbconnect } from './config/database.config.js';
 import path, { dirname } from 'path';
 dbconnect();
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 
 
@@ -30,10 +32,13 @@ app.use('/api/orders', orderRouter);
 const publicFolder = path.join(__dirname, 'public');
 app.use(express.static(publicFolder));
 
-
+app.get('*', (req, res) => {
+  const indexFilePath = path.join(publicFolder, 'index.html');
+  res.sendFile(indexFilePath);
+});
   
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, ()=> {
   console.log('listening on port'+PORT);
 });
